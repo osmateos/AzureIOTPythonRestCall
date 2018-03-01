@@ -1,14 +1,26 @@
+''' This example shows how to connect with the IOT hub and send events just using the API
+    and sending a bytearray to the endpoint using the sas token
+    No sdk library is needed
+'''
+
 import time
 from datetime import datetime
 import requests
 import random
 import httplib, urllib, base64, json
 
-iotHub = "osmateosiothub";
-deviceId = "MyFirstPythonDevice";
+iotHub = "osmateosiothub"
+deviceId = "MyFirstPythonDevice"  # This should be the name for you registered device
 api = "2016-02-03" 
 restUriPost = "https://" + iotHub + ".azure-devices.net/devices/" + deviceId + "/messages/events?api-version=" + api
-sas = "SharedAccessSignature sr=osmateosiothub.azure-devices.net&sig=WWKYesM0tQrRhodI3KOgggSN3qdqx%2FhaFjQY24Eo%2BLk%3D&se=1519921120&skn=iothubowner"
+sas = "xxx"
+
+# sas format should look like 
+# "SharedAccessSignature sr=osmateosiothub.azure-devices.net&sig=xxxxskn=iothubowner"
+# It can be generated trought the azure cli with this command 
+# az iot hub generate-sas-token --hub-name osmateosiothub
+
+
 headers = {
     # Request headers
     'Content-Type': 'application/octet-stream',
@@ -16,6 +28,10 @@ headers = {
 }
 
 def getFlowValues(mydateTime):
+'''This function return a formatted text with some random values 
+   from temperature,flow or humidity
+   input mydatetime is a timestamp
+'''
     deviceValue = random.randint(1, 100)
     deviceParameterList = ['Flow', 'Temperature','Humidity']
     deviceId = 'SensorDevice'
